@@ -167,7 +167,7 @@
     if (e.key === 'ArrowRight') action = v => seek(v, (e.shiftKey ? SEEK_LARGE : SEEK_SMALL));
     if (e.key === FRAME_BACK_KEY && !e.shiftKey) action = v => frameStep(v, -1);
     if (e.key === FRAME_FWD_KEY && !e.shiftKey) action = v => frameStep(v, +1);
-    if (e.code === 'Space' && !e.shiftKey) action = v => togglePlay(v);
+    if (e.code === 'Space' && !e.shiftKey && !e.repeat) action = v => togglePlay(v);
     if (!action) return;
 
     const video = getVideo();
@@ -177,5 +177,12 @@
     e.preventDefault();
     e.stopImmediatePropagation();
     action(video);
+  }, true);
+  window.addEventListener('keyup', e => {
+    if (isTyping(e) || e.ctrlKey || e.altKey || e.metaKey) return;
+    if (e.code === 'Space') {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
   }, true);
 })();
